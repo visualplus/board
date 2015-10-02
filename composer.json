@@ -1,0 +1,11 @@
+{
+    "name": "visualplus/board",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "doojin so",
+            "email": "sodoojin@gmail.com"
+        }
+    ],
+    "require": {}
+}
