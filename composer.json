@@ -7,5 +7,10 @@
             "email": "sodoojin@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Visualplus\\Board": "src/"
+        }
+    },
     "require": {}
 }
