@@ -1,6 +1,6 @@
 <?php
 
-namespace Visualplus\Djboard\Middleware;
+namespace Visualplus\Board\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;

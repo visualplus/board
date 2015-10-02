@@ -1,5 +1,5 @@
 <?php
-namespace Visualplus\Djboard;
+namespace Visualplus\Board;
 
 use Illuminate\Http\Request;
 
