@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDjBoard extends Migration
+class CreateBoard extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class CreateDjBoard extends Migration
      */
     public function up()
     {
-        Schema::create('dj_boards', function(BluePrint $table) {
+         Schema::create('boards', function(BluePrint $table) {
         	$table->engine = 'InnoDB';
 			
         	$table->increments('id');
-			$table->integer('user_id');
+			$table->integer('user_id')->unsigned();
 			$table->string('title', '100');
 			$table->text('content');
 			$table->timestamps();
@@ -25,15 +25,15 @@ class CreateDjBoard extends Migration
 			$table->foreign('user_id')->references('id')->on('users');
         });
 		
-		Schema::create('dj_board_files', function(BluePrint $table) {
+		Schema::create('board_files', function(BluePrint $table) {
 			$table->engine = 'InnoDB';
 			
 			$table->increments('id');
-			$table->integer('bo_id');
+			$table->integer('bo_id')->unsigned();
 			$table->string('filename');
 			$table->timestamps();
 			
-			$table->foreign('bo_id')->references('id')->on('dj_boards');
+			$table->foreign('bo_id')->references('id')->on('boards');
 		});
     }
 
@@ -44,7 +44,8 @@ class CreateDjBoard extends Migration
      */
     public function down()
     {
-        Schema::drop('dj_boards');
-		Schema::drop('dj_board_files');
+        //
+        Schema::drop('boards');
+		Schema::drop('board_files');
     }
 }

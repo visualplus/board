@@ -4,19 +4,29 @@ namespace Visualplus\Board;
 use Illuminate\Http\Request;
 
 use Route;
+use Auth;
 
 trait BoardSystem {
-	private $_model;
-	
-	public function __construct() {
-		if (isset($this->model) && $this->model != '') 
-			$this->_model = new $this->model;
-	}
-	
+	/*
+	 * 원본 라우팅 이름을 가져온다.
+	 * 
+	 * @return string
+	 */
 	private function parseRouteName() {
 		$stack = explode('.', Route::getCurrentRoute()->getName());
 		array_pop($stack);
+		
 		return implode('.', $stack);
+	}
+	
+	/*
+	 * 게시글 작성자인지 확인함 해당 모델은 isOwner(App\User $user) 함수를 가지고 있어야함.
+	 * 
+	 * @param model $article
+	 * @return bool
+	 */
+	private function checkOwner($article) {
+		return $article->isOwner(Auth::user());
 	}
 	
 	/*
@@ -26,7 +36,9 @@ trait BoardSystem {
 	 */
     public function index()
     {
-		$list = $this->_model->orderBy('created_at', 'desc')->paginate(10);
+    	$model = new $this->model;
+		
+		$list = $model->orderBy('created_at', 'desc')->paginate(10);
 		
 		$routeName = $this->parseRouteName();
 		
@@ -62,6 +74,7 @@ trait BoardSystem {
 		
 		$article = new $this->model;
 		
+		$article->user_id = Auth::user()->id;
 		$article->title = $request->get('title');
 		$article->content = $request->get('content');
 		$article->save();
@@ -77,7 +90,9 @@ trait BoardSystem {
 	 */
     public function show($id)
     {
-    	$article = $this->_model->findOrFail($id);
+    	$model = new $this->model;
+		
+    	$article = $model->findOrFail($id);
 		$routeName = $this->parseRouteName();
 		
 		return view($this->skin.'.show')->with(compact('article', 'routeName'));
@@ -91,8 +106,15 @@ trait BoardSystem {
 	 */
     public function edit($id)
     {
-    	$article = $this->_model->findOrFail($id);
+    	$model = new $this->model;
 		$routeName = $this->parseRouteName();
+		
+    	$article = $model->findOrFail($id);
+		
+		// 해당 게시글의 소유자가 아님
+		if (!$this->checkOwner($article)) {
+			return redirect()->route($routeName.'.show', [$id]);
+		}
 		
 		return view($this->skin.'.create')->with(compact('article', 'routeName'));
     }
@@ -111,8 +133,18 @@ trait BoardSystem {
     		'content' => 'required',
     	]);
 		
-    	$article = $this->_model->findOrFail($id);
+		$model = new $this->model;
 		$routeName = $this->parseRouteName();
+		
+    	$article = $model->findOrFail($id);
+		
+		// 해당 게시글의 소유자일 경우에만 업데이트
+		if ($this->checkOwner($article)) {
+			$article->title = $request->get('title');
+			$article->content = $request->get('content');
+			
+			$article->save();
+		}
 		
 		return redirect()->route($routeName.'.show', [$id]);
     }
@@ -125,6 +157,16 @@ trait BoardSystem {
 	 */
     public function destroy($id)
     {
-    	
+    	$model = new $this->model;
+		
+		$routeName = $this->parseRouteName();
+    	$article = $model->findOrFail($id);
+		
+		// 해당 게시글의 소유자일 경우에만 삭제
+		if ($this->checkOwner($article)) {
+			$article->delete();
+		}
+		
+		return redirect()->route($routeName.'.index');
     }
 }

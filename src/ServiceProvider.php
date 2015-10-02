@@ -11,7 +11,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
     public function boot()
     {
         $this->publishes([
-        	__DIR__.'/migrations/'	=> database_path('migrations'),
+        	__DIR__.'/migrations/' => database_path('migrations'),
         ], 'migrations');
     }
 
