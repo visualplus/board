@@ -19,7 +19,6 @@ class CreateBoard extends Migration
 			$table->increments('id');
 			$table->string('name');
 			$table->string('table_name');
-			$table->string('category', 100);
 			$table->timestamps();
 		});
 		
@@ -39,7 +38,7 @@ class CreateBoard extends Migration
         });
 		
 		// 게시글에 연결된 파일 담을 테이블
-		Schema::create('article_files', function(BluePrint $table) {
+		Schema::create('articles_files', function(BluePrint $table) {
 			$table->engine = 'InnoDB';
 			
 			$table->increments('id');

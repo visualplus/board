@@ -5,12 +5,14 @@
 	{!! Form::open([
 		'route' => [$baseRouteName.'.update', $bo_id, $article->id],
 		'class' => 'form-horizontal',
-		'method' => 'put'
+		'method' => 'put',
+		'enctype' => 'multipart/form-data',
 	]) !!}
 @else
 	{!! Form::open([
 		'route' => [$baseRouteName.'.store', $bo_id],
 		'class' => 'form-horizontal',
+		'enctype' => 'multipart/form-data',
 	]) !!}
 @endif
 <div class='form-group'>
@@ -31,6 +33,12 @@
 			'id' => 'content',
 			'placeholder' => '내용',
 		]) !!}
+	</div>
+</div>
+<div class='form-group'>
+	<label for='file' class='col-sm-2 control-label'>파일</label>
+	<div class='col-sm-10'>
+		{!! Form::file('uploads[]') !!}
 	</div>
 </div>
 <div class='form-group'>

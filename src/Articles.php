@@ -31,6 +31,16 @@ class Articles extends Model
 	}
 	
 	/*
+	 * 연결 파일 relation
+	 * 
+	 * @return ArticleFiles 모델
+	 */
+	public function files() {
+		return $this->hasMany('Visualplus\Board\ArticleFiles');
+	}
+	 
+	
+	/*
 	 * 게시글의 소유자인지 확인
 	 * 
 	 * @param \App\User $user

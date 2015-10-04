@@ -18,8 +18,14 @@ class BoardController extends \App\Http\Controllers\Controller {
 	// 게시글 테이블 모델
 	protected $articles_model = 'Visualplus\Board\Articles';
 	
+	// 게시글 파일 테이블 모델
+	protected $article_files_model = 'Visualplus\Board\ArticleFiles';
+	
 	// 한 화면에 표시할 리스트 개수
 	protected $itemsPerPage = 10;
+	
+	// 파일 업로드 경로
+	protected $uploadPath = '../storage/app/board/';
 	
 	// 기본 라우트 이름
 	private $baseRouteName = "";
@@ -92,6 +98,19 @@ class BoardController extends \App\Http\Controllers\Controller {
 		$articles_model->content = $request->get('content');
 		$articles_model->user_id = Auth::user()->id;
 		$articles_model->save();
+		
+		foreach ($request->file('uploads') as $upload) {
+			if ($upload == null) continue;
+			$filename = time().'.'.$upload->getClientOriginalExtension();
+			$upload->move($this->uploadPath, $filename);
+			
+			$article_file = new $this->article_files_model;
+			$article_file->setTable($this->board_setting->table_name.'_files');
+			
+			$article_file->article_id = $articles_model->id;
+			$article_file->filename = $filename;
+			$article_file->save();
+		}
 		
 		return redirect()->route($this->baseRouteName.'.show', [$bo_id, $articles_model->id]);
 	}

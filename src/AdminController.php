@@ -71,7 +71,6 @@ class AdminController extends \App\Http\Controllers\Controller {
 		
 		$model->name 		= $request->get('name');
 		$model->table_name 	= $request->get('table_name');
-		$model->category 	= $request->get('category');
 		$model->save();
 		
 		return redirect()->route($this->baseRouteName.'.index');

@@ -26,16 +26,6 @@
 	</div>
 </div>
 <div class='form-group'>
-	<label for='table_name' class='col-sm-2 control-label'>카테고리</label>
-	<div class='col-sm-10'>
-		{!! Form::text('category', old('category'), [
-			'class' => 'form-control',
-			'id' => 'category',
-			'placeholder' => '카테고리',
-		]) !!}
-	</div>
-</div>
-<div class='form-group'>
 	<div class='col-sm-12 text-right'>
 		{!! Form::submit('작성완료', [
 			'class' => 'btn btn-primary btn-sm',
