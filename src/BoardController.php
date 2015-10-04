@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Route;
 use Auth;
 use View;
+use Cookie;
 
 class BoardController extends \App\Http\Controllers\Controller {
 	// 스킨
@@ -102,12 +103,20 @@ class BoardController extends \App\Http\Controllers\Controller {
 	 * @param  int  $id
      * @return \Illuminate\Http\Response
 	 */
-    public function show($bo_id, $id)
+    public function show(Request $request, $bo_id, $id)
     {
     	$articles_model = new $this->articles_model;
 		$articles_model->setTable($this->board_setting->table_name);
 		
 		$article = $articles_model->findOrFail($id);
+		$article->setTable($this->board_setting->table_name);
+		
+		if ($request->cookie($bo_id.$id) != '1') {
+			$article->hit ++;
+			$article->save();
+		}
+		
+		Cookie::queue(Cookie::make($bo_id.$id, '1'));
 		
 		return view($this->skin.'.show')->with(compact('article'));
     }
