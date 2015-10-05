@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ArticleFiles extends Model
 {
-	use SoftDeletes;
-	
 	// 테이블명
 	protected $table = "";
 	

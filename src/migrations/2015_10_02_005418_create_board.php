@@ -42,11 +42,12 @@ class CreateBoard extends Migration
 			$table->engine = 'InnoDB';
 			
 			$table->increments('id');
-			$table->integer('article_id')->unsigned();
+			$table->integer('articles_id')->unsigned();
 			$table->string('filename');
+			$table->integer('rank')->unsigned();
 			$table->timestamps();
 			
-			$table->foreign('article_id')->references('id')->on('articles');
+			$table->foreign('articles_id')->references('id')->on('articles');
 		});
     }
 
@@ -57,12 +58,12 @@ class CreateBoard extends Migration
      */
     public function down()
     {
-		Schema::table('article_files', function($table) {
-			$table->dropForeign('article_files_article_id_foreign');
+		Schema::table('articles_files', function($table) {
+			$table->dropForeign('articles_files_articles_id_foreign');
 		});
 		
     	Schema::drop('board_configs');
 		Schema::drop('articles');
-		Schema::drop('article_files');
+		Schema::drop('articles_files');
     }
 }

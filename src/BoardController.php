@@ -7,6 +7,7 @@ use Route;
 use Auth;
 use View;
 use Cookie;
+use Storage;
 
 class BoardController extends \App\Http\Controllers\Controller {
 	// 스킨
@@ -48,6 +49,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 		
 		View::share('baseRouteName', $this->baseRouteName);
 		View::share('bo_id', $bo_id);
+		View::share('board_setting', $this->board_setting);
 	}
 	
 	/*
@@ -99,15 +101,16 @@ class BoardController extends \App\Http\Controllers\Controller {
 		$articles_model->user_id = Auth::user()->id;
 		$articles_model->save();
 		
-		foreach ($request->file('uploads') as $upload) {
+		foreach ($request->file('uploads') as $index => $upload) {
 			if ($upload == null) continue;
-			$filename = time().'.'.$upload->getClientOriginalExtension();
+			
+			$filename = time().$index.'.'.$upload->getClientOriginalExtension();
 			$upload->move($this->uploadPath, $filename);
 			
 			$article_file = new $this->article_files_model;
 			$article_file->setTable($this->board_setting->table_name.'_files');
-			
-			$article_file->article_id = $articles_model->id;
+			$article_file->rank = $index;
+			$article_file->articles_id = $articles_model->id;
 			$article_file->filename = $filename;
 			$article_file->save();
 		}
@@ -188,6 +191,27 @@ class BoardController extends \App\Http\Controllers\Controller {
 		$article->title = $request->get('title');
 		$article->content = $request->get('content');
 		$article->save();
+		
+		// 첨부파일 업로드
+		foreach ($request->file('uploads') as $index => $upload) {
+			if ($upload == null) continue;
+			
+			if (($file = $article->files->where('rank', $index)->first())) {
+				Storage::delete(str_replace('../storage/app/', '', $this->uploadPath.$file->filename));
+				$file->setTable($this->board_setting->table_name.'_files');
+				$file->delete();
+			}
+			
+			$filename = time().$index.'.'.$upload->getClientOriginalExtension();
+			$upload->move($this->uploadPath, $filename);
+			
+			$article_file = new $this->article_files_model;
+			$article_file->setTable($this->board_setting->table_name.'_files');
+			$article_file->rank = $index;
+			$article_file->articles_id = $article->id;
+			$article_file->filename = $filename;
+			$article_file->save();
+		}
 		
 		return redirect()->route($this->baseRouteName.'.show', [$bo_id, $article->id]);
     }

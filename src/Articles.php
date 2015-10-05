@@ -5,6 +5,8 @@ namespace Visualplus\Board;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Articles extends Model
 {
 	use SoftDeletes;
@@ -36,7 +38,12 @@ class Articles extends Model
 	 * @return ArticleFiles 모델
 	 */
 	public function files() {
-		return $this->hasMany('Visualplus\Board\ArticleFiles');
+		$foreignKey = $this->getForeignKey();
+		$localKey = $this->getKeyName();
+		$instance = new \Visualplus\Board\ArticleFiles;
+		$instance->setTable($this->table.'_files');
+		
+		return new HasMany($instance->newQuery(), $this, $instance->getTable().'.'.$foreignKey, $localKey);
 	}
 	 
 	
