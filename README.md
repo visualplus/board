@@ -151,3 +151,19 @@ protected $uploadPath = '../storage/app/board/';
 파일명은 현재 timestamp + 올린 파일 확장자 입니다.
 
 위 값을 변경하여 첨부파일이 저장될 위치를 수정하세요.
+
+### 라우팅 설정
+```
+Route::resource('board/admin', '게시판 관리자 컨트롤러');
+Route::resource('board/{bo_id}', '게시판 컨트롤러');
+```
+
+위와 같이 설정해주시면 됩니다.
+
+접근은 
+```
+board/[게시판 설정에 등록된 게시판 id값]
+```
+
+으로 가능합니다.
+
