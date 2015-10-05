@@ -12,5 +12,6 @@
             "Visualplus\\Board\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+    }
 }

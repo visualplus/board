@@ -41,6 +41,26 @@ class BoardAdminController extends \Visualplus\Board\AdminController
 }
 ```
 
+### 모델 바인딩
+AdminController를 사용하기 위해서 모델을 필히 바인딩 해주셔야 합니다.
+
+```
+protected $model = '';
+```
+
+게시판 설정 모델을 적어줍니다.
+기본으로 제공되는 테이블의 모델을 사용하시려면
+
+```
+php artisan make:model BoardConfig
+```
+
+```
+protected $model = '\App\BoardConfig';
+```
+
+위와같이 설정해주세요.
+
 ## 게시판 페이지 설정
 컨트롤러를 하나 생성 후 Visualplus\Board\BoardController를 상속합니다.
 
@@ -55,6 +75,44 @@ class FreeBoardController extends \Visualplus\Board\BoardController
 
 ## 옵션 변경
 BoardController는 몇가지 옵션을 제공합니다.
+
+### 게시판 설정 모델 바인딩
+
+```
+protected $config_model = '';
+```
+
+각 게시판 컨트롤러는 자신의 설정값을 가져오기 위해 게시판 설정 모델을 지정해줘야 합니다.
+이 값은 기본값이 없으며 무조건 설정을 해주셔야 하는 값 입니다.
+
+제공되는 migrations 파일을 그대로 사용을 하셨다면
+
+```
+php artisan make:model BoardConfig
+```
+
+```
+protected $config_model = '\App\BoardConfig';
+```
+
+위와 같이 설정을 해 주세요.
+
+### 게시판 모델 바인딩
+
+```
+// 게시글 테이블 모델
+protected $articles_model = 'Visualplus\Board\Articles';
+
+// 게시글 파일 테이블 모델
+protected $article_files_model = 'Visualplus\Board\ArticleFiles';
+```
+
+게시판 글을 저장할 모델과, 첨부파일을 저장할 모델이 필요합니다.
+기본으로 제공되는 모델을 사용하며 테이블명은 따로 기재해주실 필요가 없습니다.
+( 관리자페이지에서 해당 게시판의 테이블을 설정합니다. )
+
+임의로 만든 모델을 사용하고 싶으시다면 위 값을 변경해주세요.
+
 
 ### 스킨.
 
