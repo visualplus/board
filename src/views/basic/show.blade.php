@@ -22,7 +22,13 @@
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td>{{ $article->user->name }}</td>
+			<td>
+				@if (isset($article->user))
+					{{ $article->user->name }}
+				@else
+					-
+				@endif
+			</td>
 			<th>작성일</th>
 			<td>{{ date('Y-m-d', strtotime($article->created_at)) }}</td>
 			<th>조회수</th>

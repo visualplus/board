@@ -27,7 +27,13 @@
 			<tr>
 				<td class='text-center'>{{ number_format($list->total() - $list->perPage() * ($list->currentPage() - 1) - $index) }}</td>
 				<td>{!! Html::link(route($baseRouteName.'.show', [$bo_id, $article->id]), $article->title) !!}</td>
-				<td class='text-center'>{{ $article->user->name }}</td>
+				<td class='text-center'>
+					@if (isset($article->user))
+						{{ $article->user->name }}
+					@else
+						-
+					@endif
+				</td>
 				<td class='text-center'>{{ date('Y-m-d', strtotime($article->created_at)) }}</td>
 				<td class='text-center'>{{ number_format($article->hit) }}</td>
 			</tr>
