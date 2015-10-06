@@ -53,7 +53,7 @@ class Articles extends Model
 	 * @param \App\User $user
 	 * @return bool
 	 */
-	public function isOwner(\App\User $user) {
+	public function isOwner($user) {
 		return ($user != null && $this->user_id == $user->id);
 	}
 }
