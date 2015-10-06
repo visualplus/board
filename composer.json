@@ -13,6 +13,6 @@
         }
     },
     "require": {
-    	"illuminate/html": "*"
+    	"illuminate/html": ">=4.2"
     }
 }
