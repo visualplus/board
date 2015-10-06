@@ -101,7 +101,11 @@ class BoardController extends \App\Http\Controllers\Controller {
 		
 		$articles_model->title = $request->get('title');
 		$articles_model->content = $request->get('content');
-		$articles_model->user_id = Auth::user()->id;
+		if (Auth::check()) {
+			$articles_model->user_id = Auth::user()->id;
+		} else {
+			$articles_model->user_id = 0;
+		}
 		$articles_model->save();
 		
 		foreach ($request->file('uploads') as $index => $upload) {

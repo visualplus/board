@@ -155,7 +155,7 @@ protected $uploadPath = '../storage/app/board/';
 ### 라우팅 설정
 ```
 Route::resource('board/admin', '게시판 관리자 컨트롤러');
-Route::resource('board/{bo_id}', '게시판 컨트롤러');
+Route::resource('board/{bo_id}/', '게시판 컨트롤러');
 ```
 
 위와 같이 설정해주시면 됩니다.
