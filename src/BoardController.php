@@ -44,12 +44,15 @@ class BoardController extends \App\Http\Controllers\Controller {
 		// 게시판 설정 로드
 		if ($this->config_model == '') abort('500');
 		$config_model = new $this->config_model;
-		$bo_id = Route::current()->parameters()['bo_id'];
-		$this->board_setting = $config_model->findOrFail($bo_id);
 		
-		View::share('baseRouteName', $this->baseRouteName);
-		View::share('bo_id', $bo_id);
-		View::share('board_setting', $this->board_setting);
+		if (Route::current() != null) {
+			$bo_id = Route::current()->parameters()['bo_id'];
+			$this->board_setting = $config_model->findOrFail($bo_id);
+			
+			View::share('baseRouteName', $this->baseRouteName);
+			View::share('bo_id', $bo_id);
+			View::share('board_setting', $this->board_setting);
+		}
 	}
 	
 	/*

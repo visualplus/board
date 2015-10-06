@@ -39,10 +39,7 @@
 		<tr>
 			<th>내용</th>
 			<td style='padding: 5px 10px;'>
-				{!! Form::textarea('content', isset($article) ? $article->content : old('content'), [
-					'class' => 'form-control input-sm',
-					'id' => 'content',
-				]) !!}
+				@include ('board::plugins.smart_editor.editor', ['name' => 'content', 'value' => isset($article) ? $article->content : old('content')])
 			</td>
 		</tr>
 		<tr class='file-control'>
@@ -52,7 +49,8 @@
 					@for ($i = 0; $i < 5; $i ++)
 					<li>
 						{!! Form::file('uploads['.$i.']', [
-							'id' => 'uploads['.$i.']'
+							'id' => 'uploads['.$i.']',
+							'class' => 'file-controls',
 						]) !!}
 						<button type='button' class='btn btn-default btn-sm pull-left file-control-btn'>
 							<span class='glyphicon glyphicon-paperclip'></span>
@@ -90,6 +88,18 @@
 <script>
 $('.file-control-btn').click(function() {
 	$(this).closest('li').find('input[type=file]').trigger('click');
+});
+
+$('.file-controls').change(function() {
+	var $btnControl = $(this).closest('li').find('.file-control-btn');
+	
+	if ($(this).val() != '') {
+		$btnControl.removeClass('btn-default');
+		$btnControl.addClass('btn-primary');
+	} else {
+		$btnControl.removeClass('btn-primary');
+		$btnControl.addClass('btn-default');
+	}
 });
 </script>
 @stop

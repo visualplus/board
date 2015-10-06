@@ -167,3 +167,14 @@ board/[게시판 설정에 등록된 게시판 id값]
 
 으로 가능합니다.
 
+
+### 네이버 스마트 에디터 사용
+
+스마트 에디터를 사용할 뷰에서 아래 내용을 입력해주세요.
+textarea가 들어가야 할 곳에서 include해주시면 됩니다.
+
+basic/create.blade.php 참조. 
+```
+@include ('board::plugins.smart_editor.editor', ['name' => [컨트롤 명], 'value' => [초기값]])
+```
+
