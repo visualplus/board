@@ -19,6 +19,7 @@ class CreateBoard extends Migration
 			$table->increments('id');
 			$table->string('name');
 			$table->string('table_name');
+			$table->string('skin');
 			$table->timestamps();
 		});
 		

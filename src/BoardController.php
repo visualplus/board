@@ -10,9 +10,6 @@ use Cookie;
 use Storage;
 
 class BoardController extends \App\Http\Controllers\Controller {
-	// 스킨
-	protected $skin = "board::basic";
-	
 	// 게시판 설정 테이블 모델
 	protected $config_model = '';
 	
@@ -49,10 +46,29 @@ class BoardController extends \App\Http\Controllers\Controller {
 			$bo_id = Route::current()->parameters()['bo_id'];
 			$this->board_setting = $config_model->findOrFail($bo_id);
 			
+			// 첨부파일 업로드 경로 변경
+			$this->uploadPath .= $bo_id.'/';
+			
 			View::share('baseRouteName', $this->baseRouteName);
 			View::share('bo_id', $bo_id);
 			View::share('board_setting', $this->board_setting);
 		}
+	}
+
+	/* 
+	 * 파일명을 일정 규칙에 따라 리턴함
+	 * 
+	 * @param UploadedFile
+	 * @return string
+	 */ 
+	protected function getFilename($file) {
+		$filename = time();
+		
+		while (Storage::exists(str_replace('../storage/app/', '', $this->uploadPath.$filename.'.'.$file->getClientOriginalExtension()))) {
+			$filename ++;
+		}
+		
+		return $filename.'.'.$file->getClientOriginalExtension();
 	}
 	
 	/*
@@ -68,7 +84,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 		
 		$list = $articles_model->orderBy('created_at', 'desc')->paginate($this->itemsPerPage);
     	
-    	return view($this->skin.'.index')->with(compact('list'));
+    	return view($this->board_setting->skin.'.index')->with(compact('list'));
     }
     
 	/*
@@ -79,7 +95,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 	 */
     public function create($bo_id)
     {
-    	return view($this->skin.'.create');
+    	return view($this->board_setting->skin.'.create');
     }
 
 	/*
@@ -111,7 +127,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 		foreach ($request->file('uploads') as $index => $upload) {
 			if ($upload == null) continue;
 			
-			$filename = time().$index.'.'.$upload->getClientOriginalExtension();
+			$filename = $this->getFilename($upload);
 			$upload->move($this->uploadPath, $filename);
 			
 			$article_file = new $this->article_files_model;
@@ -147,7 +163,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 		
 		Cookie::queue(Cookie::make($bo_id.$id, '1'));
 		
-		return view($this->skin.'.show')->with(compact('article'));
+		return view($this->board_setting->skin.'.show')->with(compact('article'));
     }
 
 	/*
@@ -167,7 +183,7 @@ class BoardController extends \App\Http\Controllers\Controller {
 			return redirect()->route($this->baseRouteName.'.index', $bo_id);
 		}
 		
-		return view($this->skin.'.create')->with(compact('article'));
+		return view($this->board_setting->skin.'.create')->with(compact('article'));
     }
 
 	/*
@@ -203,13 +219,14 @@ class BoardController extends \App\Http\Controllers\Controller {
 		foreach ($request->file('uploads') as $index => $upload) {
 			if ($upload == null) continue;
 			
+			// 기존 파일 삭제
 			if (($file = $article->files->where('rank', $index)->first())) {
 				Storage::delete(str_replace('../storage/app/', '', $this->uploadPath.$file->filename));
 				$file->setTable($this->board_setting->table_name.'_files');
 				$file->delete();
 			}
 			
-			$filename = time().$index.'.'.$upload->getClientOriginalExtension();
+			$filename = $this->getFilename($upload);
 			$upload->move($this->uploadPath, $filename);
 			
 			$article_file = new $this->article_files_model;

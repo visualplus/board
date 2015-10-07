@@ -65,12 +65,14 @@ class AdminController extends \App\Http\Controllers\Controller {
     	$this->validate($request, [
     		'name' => 'required',
     		'table_name' => 'required',
+    		'skin' => 'required',
     	]);
 		
 		$model = new $this->model;
 		
 		$model->name 		= $request->get('name');
 		$model->table_name 	= $request->get('table_name');
+		$model->skin		= $request->get('skin');
 		$model->save();
 		
 		return redirect()->route($this->baseRouteName.'.index');

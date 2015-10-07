@@ -6,6 +6,7 @@
 	<col width='50' />
 	<col width='' />
 	<col width='120' />
+	<col width='120' />
 	<col width='200' />
 	<col width='100' />
 	<col width='80' />
@@ -15,6 +16,7 @@
 		<th class='text-center'>#</th>
 		<th class='text-center'>게시판 이름</th>
 		<th class='text-center'>DB 테이블</th>
+		<th class='text-center'>스킨</th>
 		<th class='text-center'>카테고리</th>
 		<th class='text-center'>생성 일시</th>
 		<th class='text-center'>명령</th>
@@ -31,6 +33,9 @@
 			</td>
 			<td class='text-center'>
 				{{ $board->table_name }}
+			</td>
+			<td class='text-center'>
+				{{ $board->skin }}
 			</td>
 			<td class='text-center'>
 				{{ $board->category }}

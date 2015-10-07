@@ -26,6 +26,16 @@
 	</div>
 </div>
 <div class='form-group'>
+	<label for='skin' class='col-sm-2 control-label'>게시판 스킨</label>
+	<div class='col-sm-10'>
+		{!! Form::text('skin', old('skin'), [
+			'class' => 'form-control',
+			'id' => 'skin',
+			'placeholder' => '게시판 스킨',
+		]) !!}
+	</div>
+</div>
+<div class='form-group'>
 	<div class='col-sm-12 text-right'>
 		{!! Form::submit('작성완료', [
 			'class' => 'btn btn-primary btn-sm',

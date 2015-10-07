@@ -116,10 +116,6 @@ protected $article_files_model = 'Visualplus\Board\ArticleFiles';
 
 ### 스킨.
 
-```
-protected $skin = 'board::basic';
-```
-
 초기 게시판 스킨은 기본 스킨이며 별로 이쁘지 않습니다.
 그러므로 각자 스타일에 맞게 커스터마이징을 하셔야 합니다.
 게시판의 스킨은 
@@ -132,6 +128,8 @@ protected $skin = 'board::basic';
 예를들어 'board::'는 패키지 내의 'views' 디렉토리와 매핑되어있으며, views안에 basic이라는 디렉토리가 있습니다.
 그러므로 'board::basic'은 'vendor/visualplus/board/src/views/basic'을 참조하며 이 디렉토리 안에 위에 나열한 3가지 파일이 
 모두 있어야 합니다.
+
+스킨은 관리자 화면에서 게시판 생성시 설정할 수 있습니다.
 
 ### 한 화면에 표시할 리스트 개수.
 ```
